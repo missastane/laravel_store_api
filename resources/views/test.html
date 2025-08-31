@@ -1,0 +1,74 @@
+<table border="1">
+    <thead>
+        <tr id="product-names">
+            <th>ویژگی‌ها</th>
+        </tr>
+    </thead>
+    <tbody id="comparison-table"></tbody>
+</table>
+
+<script>
+    const response = {  
+        "status": true,  
+        "message": "لیست مقایسه با موفقیت ارسال شد",  
+        "data": {  
+            "products": [  
+                { "name": "موبایل سامسونگ", "image": "samsung.jpg", "price": "3000000.000", "width": "15.0", "height": "15.0", "length": "35.0", "weight": "1.00" },  
+                { "name": "آیفون 14", "image": "iphone.jpg", "price": "50000000.000", "width": "10.0", "height": "1.0", "length": "15.0", "weight": "1.00" },  
+                { "name": "موبایل سامسونگ مدل a71", "image": "a71.jpg", "price": "12000000.000", "width": "7.0", "height": "1.0", "length": "15.0", "weight": "1.00" }  
+            ],  
+            "attributes": {  
+                "نمایشگر": { "موبایل سامسونگ": "", "آیفون 14": "10", "موبایل سامسونگ مدل a71": "" },  
+                "رم": { "موبایل سامسونگ": "32", "آیفون 14": "8, 32", "موبایل سامسونگ مدل a71": "" },  
+                "دوربین": { "موبایل سامسونگ": "", "آیفون 14": "دوربین جلو : 15 مگاپیکسل - دوربین پشت : 5 و 8 و 12 و 60", "موبایل سامسونگ مدل a71": "" },  
+                "پردازنده گرافیکی": { "موبایل سامسونگ": "", "آیفون 14": "2", "موبایل سامسونگ مدل a71": "" }
+            }  
+        }  
+    };
+
+    const { products, attributes } = response.data;
+    const tableHead = document.getElementById("product-names");
+    const tableBody = document.getElementById("comparison-table");
+
+    // اضافه کردن محصولات به عنوان تیتر
+    products.forEach(product => {
+        const th = document.createElement("th");
+        th.innerHTML = `<img src="${product.image}" width="50"><br>${product.name}<br>قیمت: ${Number(product.price).toLocaleString()} تومان`;
+        tableHead.appendChild(th);
+    });
+
+    // اضافه کردن ویژگی‌ها از attributes
+    Object.entries(attributes).forEach(([attribute, values]) => {
+        const tr = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = attribute;
+        tr.appendChild(th);
+
+        products.forEach(product => {
+            const td = document.createElement("td");
+            td.textContent = values[product.name] || "-";
+            tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
+    });
+
+    // اضافه کردن ویژگی‌های محصول (طول، عرض، ارتفاع، وزن)
+    const extraAttributes = ["width", "height", "length", "weight"];
+    const extraLabels = { "width": "عرض", "height": "ارتفاع", "length": "طول", "weight": "وزن" };
+
+    extraAttributes.forEach(attr => {
+        const tr = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = extraLabels[attr];
+        tr.appendChild(th);
+
+        products.forEach(product => {
+            const td = document.createElement("td");
+            td.textContent = product[attr] || "-";
+            tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
+    });
+</script>
